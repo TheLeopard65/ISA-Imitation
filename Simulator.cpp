@@ -13,9 +13,8 @@ int MAR = 0, MDR = 0, AC = 0, PC = 0, address, tempCount = 0;
 
 void initializeMemory() {
     srand(static_cast<unsigned int>(time(0)));
-    for (int i = 0; i < MEMORY_SIZE; ++i) {
+    for (int i = 0; i < MEMORY_SIZE; ++i)
         memory[i] = rand() % 100;
-    }
 }
 
 void ADD(int& value) { AC += value; MDR = value; }
@@ -42,11 +41,8 @@ void executeInstruction() {
         MAR = address;
         MDR = AC;
         memory[MAR] = MDR;
-    } else if (opcode == "HALT") {
-        PC = MEMORY_SIZE;
-    } else {
-        cout << "ERROR: Invalid OPCode: " << opcode << endl;
-    }
+    } else if (opcode == "HALT") PC = MEMORY_SIZE;
+    else cout << "ERROR: Invalid OPCode: " << opcode << endl;
 }
 
 void printstate() {
@@ -59,9 +55,8 @@ void printmemory(){
     cout << "PC: " << PC << "\t\tMAR: " << MAR << "\t\tMDR: " << MDR << "\t\tAC: " << AC  << "\t\tIR: " << IR << endl;
     cout << "************ CURRENT MEMORY VALUES ************" << endl;
     for (int i = 0; i < 32; i++) {
-        for (int j = 0; j < 32; j++) {
+        for (int j = 0; j < 32; j++)
             cout << memory[i * 32 + j] << " ";
-        }
         cout << endl;
     }
     cout << "************ CURRENT PROGRAM VALUES ************" << endl;
@@ -72,18 +67,14 @@ void loadProgram() {
     cout << "***** Enter Instructions on each line ('Done' to Finish) *****" << endl;
     while (true) {
         getline(cin, input);
-        if (input == "done" || input == "DONE" || input == "Done"){
-            break;
-        }
+        if (input == "done" || input == "DONE" || input == "Done") break;
         istringstream stream(input);
         stream >> opcode >> address;
         if (tempCount < STORAGE_SIZE) {
             tempOpcode[tempCount] = opcode;
             tempAddress[tempCount] = address;
             tempCount++;
-        } else {
-            cout << "ERROR: Temporary storage full!" << endl;
-        }
+        } else cout << "ERROR: Temporary storage full!" << endl;
     }
 }
 
@@ -116,20 +107,14 @@ int main() {
         cout << "TICS-OS #> ";
         cin >> command;
         cin.ignore();
-        if (command == "LOAD" || command == "load") {
-            loadProgram();
-        } else if (command == "RUN" || command == "run" || command == "r") {
-            cout << "PROCESS #> Executing the loaded Program " << endl;
+        if (command == "LOAD" || command == "load") loadProgram();
+        else if (command == "RUN" || command == "run" || command == "r") {
+            cout << "PROCESS #> Executing the loaded Program !!!" << endl;
             runProgram();
-        } else if (command == "STATE" || command == "state") {
-            printmemory();
-        } else if (command == "HELP" || command == "help") {
-            printHelp();
-        } else if (command == "QUIT" || command == "quit" || command == "EXIT" || command == "exit") {
-            break;
-        } else {
-            cout << "ERROR #> Unknown command: " << command << endl;
-        }
+        } else if (command == "STATE" || command == "state") printmemory();
+        else if (command == "HELP" || command == "help") printHelp();
+        else if (command == "QUIT" || command == "quit" || command == "EXIT" || command == "exit") break;
+        else cout << "ERROR #> Unknown command: " << command << endl;
     }
     return 0;
 }
